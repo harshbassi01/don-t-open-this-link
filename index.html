@@ -101,18 +101,6 @@
       text-align:left;
     }
 
-    .shayariBox{
-      margin-top:14px;
-      padding:16px 16px;
-      background: rgba(255,240,246,0.85);
-      border:1px solid rgba(255,214,232,0.85);
-      border-radius:20px;
-      white-space:pre-line;
-      font-size:16px;
-      line-height:1.65;
-      text-align:center;
-    }
-
     .btn{
       border:none;
       border-radius:999px;
@@ -168,7 +156,7 @@
       transition: transform 0.18s ease, opacity 0.25s ease;
     }
 
-    /* GIF wrapper (square, perfect fit) */
+    /* GIF wrapper (perfect fit square) */
     .gifWrap{
       margin-top:12px;
       border-radius:20px;
@@ -198,10 +186,8 @@
   const herName = "Siyu";
   const yourName = "Chingu";
 
-  // Page 2 heading line
   const page2TitleLine = `First of all, Kuj shabad tuhadii tareef ch 😁`;
 
-  // Punjabi tareef lines (Page 2 only)
   const tareefPunjabi = `ਤੇਰੀਆ ਅੱਖਾ, ਤੇਰੀਆ ਗਲਾਂ, ਤੇਰੇ ਬਾਲ, ਤੇਰੀ ਚਾਲ , ਤੇਰੇ ਝੁਮਕੇ, ਤੇਰੀ ਫੁਲਕਾਰੀ,
 ਮੈਂ ਵਾਦਾ ਕਰਦਾ ਮੈਂ ਕਢ ਦੇਣੀ ਆਪਣੀ ਜਿੰਦ ਤੇਰੀ ਨਾਲ ਸਾਰੀ,
 ਮੈਂ ਅੱਖ ਬੰਦ ਕਰਦਾ ਤੂੰ ਦਿਸੇ
@@ -209,7 +195,7 @@
 ਮੈਂ ਸਾਰੀ ਜਿੰਦਗੀ ਤੇਰੇ ਨਾਲ ਜਿਊਣੀ ਏ...।
 ਤੂੰ ਸਭ ਤੋਂ ਸੋਹਣੀ ਏ... ਤੂੰ ਸਭ ਤੋਂ ਸੋਹਣੀ ਏ....❤️`;
 
-  // ✅ Mind-blowing gif should appear ONLY after YES
+  // Mind-blowing GIF only AFTER YES
   const mindBlowingGif = "https://media1.tenor.com/m/QsJUMsKoCGUAAAAd/cat-heart-eye.gif";
 
   const app = document.getElementById("app");
@@ -222,7 +208,7 @@
     else renderPage3();
   }
 
-  // ✅ Page 1: ONLY "Hello Siyu"
+  // Page 1: only Hello Siyu
   function renderPage1(){
     app.innerHTML = `
       <h1>Valentine’s Day Special 💌</h1>
@@ -235,7 +221,7 @@
     `;
   }
 
-  // ✅ Page 2: ONLY tareef + shayari (NO GIF HERE)
+  // Page 2: tareef lines only (NO SHAYARI, NO GIF)
   function renderPage2(){
     app.innerHTML = `
       <h1>Just for you 💗</h1>
@@ -249,15 +235,13 @@
         </div>
       </div>
 
-      <div class="shayariBox">${shayari}</div>
-
       <button class="btn primary ui" onclick="next()">Next ➜</button>
       <p class="hint ui">Hun last page aa… 😈</p>
       <button class="btn ghost ui" onclick="back()">⬅ Back</button>
     `;
   }
 
-  // ✅ Page 3: Question page
+  // Page 3: valentine question
   function renderPage3(){
     yesScale = 1;
 
@@ -302,7 +286,7 @@
     }
   }
 
-  // ✅ After YES: show GIF here (mind-blowing moment)
+  // After YES: show GIF (mind-blowing moment)
   function yesClicked(){
     app.innerHTML = `
       <h1>YAYYYY 💞</h1>
@@ -315,8 +299,6 @@
         Pav bhaji di kasam, kade dhokha nahi dunga 🥖❤️<br>
         — <span class="eng" style="font-weight:800;">${yourName}</span>
       </p>
-
-      <div class="shayariBox">${shayari}</div>
 
       <button class="btn primary ui" onclick="page=1; render()">Back to Start</button>
     `;
@@ -352,7 +334,7 @@
       h.style.animationDelay = delay + "s";
       h.style.animationDuration = duration + "s";
       h.style.width = size + "px";
-      h.style.height = size + "px";  // ✅ fixed
+      h.style.height = size + "px";
       h.style.setProperty("--dx", dx);
       h.style.setProperty("--sc", sc);
       h.style.setProperty("--rot", rot);
@@ -369,4 +351,5 @@
 </script>
 </body>
 </html>
+
 
