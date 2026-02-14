@@ -33,6 +33,7 @@
     .eng{ font-family: Georgia, "Times New Roman", serif; letter-spacing:0.15px; }
     .ui{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 
+    /* Floating hearts background */
     .hearts-layer{
       position: fixed;
       inset: 0;
@@ -55,6 +56,16 @@
       to{ transform: translateY(-120vh) translateX(var(--dx)) scale(var(--sc)) rotate(var(--rot)); opacity:0; }
     }
 
+    /* Confetti canvas overlay */
+    #confettiCanvas{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index: 999;
+      display:none;
+    }
+
+    /* Glass card */
     .card{
       position:relative;
       z-index:1;
@@ -154,6 +165,7 @@
       transition: transform 0.18s ease, opacity 0.25s ease;
     }
 
+    /* GIF wrapper */
     .gifWrap{
       margin-top:12px;
       border-radius:20px;
@@ -173,36 +185,34 @@
       object-fit: cover;
     }
 
-    .errBox{
-      margin-top:12px;
-      padding:12px 14px;
-      border-radius:14px;
-      background:#fff0f0;
-      border:1px solid #ffb3c1;
-      color:#7a0c2e;
-      text-align:left;
-      white-space:pre-wrap;
-      font-size:14px;
+    /* Heart burst particles */
+    .burstHeart{
+      position: fixed;
+      width: 22px;
+      height: 22px;
+      pointer-events:none;
+      z-index: 1000;
+      filter: drop-shadow(0 10px 14px rgba(0,0,0,0.12));
+      opacity: 0.95;
+      animation: popFade 900ms ease-out forwards;
+    }
+    @keyframes popFade{
+      to{ transform: translate(var(--tx), var(--ty)) scale(0.2) rotate(var(--rot)); opacity:0; }
     }
   </style>
 </head>
 
 <body>
+  <canvas id="confettiCanvas"></canvas>
   <div class="hearts-layer" id="hearts"></div>
   <div class="card" id="app"></div>
 
 <script>
-  // Show errors on screen (so we know exactly what broke)
   const app = document.getElementById("app");
-  window.addEventListener("error", (e) => {
-    app.innerHTML = `
-      <h1>Oops 😬</h1>
-      <p class="hint ui">Error aa gaya. Screenshot bhej deo.</p>
-      <div class="errBox">${String(e.message || e.error || e)}</div>
-      <p class="hint ui">Tip: link open karo like: ?v=99 (cache fix)</p>
-    `;
-  });
 
+  // ======================
+  // CONFIG
+  // ======================
   const herName = "Siyu";
   const yourName = "Chingu";
 
@@ -215,12 +225,18 @@
 ਮੈਂ ਸਾਰੀ ਜਿੰਦਗੀ ਤੇਰੇ ਨਾਲ ਜਿਊਣੀ ਏ...।
 ਤੂੰ ਸਭ ਤੋਂ ਸੋਹਣੀ ਏ... ਤੂੰ ਸਭ ਤੋਂ ਸੋਹਣੀ ਏ....❤️`;
 
-  // GIF only after YES
-  const mindBlowingGif = "https://media1.tenor.com/m/QsJUMsKoCGUAAAAd/cat-heart-eye.gif";
+  // ✅ IMPORTANT: Replace this with your mindblowing meme DIRECT .gif link
+  const mindBlowingGif = "PASTE_YOUR_MINDBLOWING_GIF_DIRECT_LINK_HERE";
 
+  // ======================
+  // STATE
+  // ======================
   let page = 1;
   let yesScale = 1;
 
+  // ======================
+  // RENDER
+  // ======================
   function render(){
     if(page === 1) renderPage1();
     else if(page === 2) renderPage2();
@@ -263,7 +279,7 @@
 
     app.innerHTML = `
       <h1>${herName}… 💖</h1>
-      <h2 style="margin-top:6px;">ਵਿਲ ਯੂ ਬੀ ਮਾਏ ਵੇਲਨਟਾਈਨ? 💌</h2>
+      <h2 style="margin-top:6px;">ਕੀ ਤੂੰ ਮੇਰੀ ਵੇਲਨਟਾਈਨ ਬਣੇਗੀ? 💌</h2>
       <p class="hint ui">“ਨਹੀਂ” ਥੋੜ੍ਹਾ ਸ਼ਰਮੀਲਾ ਆ 😈</p>
 
       <div class="navRow">
@@ -275,9 +291,15 @@
     `;
   }
 
+  // ======================
+  // NAV
+  // ======================
   function next(){ page = Math.min(3, page + 1); render(); }
   function back(){ page = Math.max(1, page - 1); render(); }
 
+  // ======================
+  // NO BUTTON
+  // ======================
   function noTried(){
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
@@ -296,12 +318,19 @@
     }
   }
 
+  // ======================
+  // YES CLICKED (Effects!)
+  // ======================
   function yesClicked(){
+    // 🎉 effects first
+    startConfetti(2600);
+    heartBurst(26);
+
     app.innerHTML = `
       <h1>YAYYYY 💞</h1>
 
       <div class="gifWrap">
-        <img src="${mindBlowingGif}" alt="mind blowing gif">
+        <img src="${mindBlowingGif}" alt="mindblowing meme">
       </div>
 
       <p class="ui" style="font-size:18px;margin-top:14px;">
@@ -313,14 +342,128 @@
     `;
   }
 
-  // IMPORTANT: expose functions for inline onclick
-  window.render = render;
-  window.next = next;
-  window.back = back;
-  window.noTried = noTried;
-  window.yesClicked = yesClicked;
-  window.page = page;
+  // ======================
+  // HEART BURST
+  // ======================
+  function heartBurst(count = 20){
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
 
+    for(let i=0;i<count;i++){
+      const el = document.createElement("div");
+      el.className = "burstHeart";
+      el.innerHTML = `
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path d="M12 21s-7.2-4.6-9.6-8.7C.7 9.4 2 6.5 4.9 5.6c2-.6 3.8.2 5 1.6 1.2-1.4 3-2.2 5-1.6 2.9.9 4.2 3.8 2.5 6.7C19.2 16.4 12 21 12 21z"
+                fill="rgba(255, 30, 90, 0.85)"/>
+        </svg>
+      `;
+
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 80 + Math.random() * 160;
+      const tx = Math.cos(angle) * dist;
+      const ty = Math.sin(angle) * dist - 40;
+      const rot = (Math.random()*140 - 70) + "deg";
+
+      el.style.left = (cx - 11) + "px";
+      el.style.top  = (cy - 11) + "px";
+      el.style.setProperty("--tx", tx.toFixed(0) + "px");
+      el.style.setProperty("--ty", ty.toFixed(0) + "px");
+      el.style.setProperty("--rot", rot);
+
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(), 950);
+    }
+  }
+
+  // ======================
+  // CONFETTI (Canvas)
+  // ======================
+  const confettiCanvas = document.getElementById("confettiCanvas");
+  const cctx = confettiCanvas.getContext("2d");
+  let confettiPieces = [];
+  let confettiAnim = null;
+
+  function resizeCanvas(){
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+  }
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+
+  function startConfetti(durationMs = 2500){
+    confettiCanvas.style.display = "block";
+    confettiPieces = [];
+
+    const w = confettiCanvas.width;
+    const h = confettiCanvas.height;
+
+    const colors = [
+      "rgba(255, 30, 90, 0.95)",
+      "rgba(255, 175, 204, 0.95)",
+      "rgba(255, 214, 232, 0.95)",
+      "rgba(214, 40, 40, 0.95)"
+    ];
+
+    const total = 160;
+    for(let i=0;i<total;i++){
+      confettiPieces.push({
+        x: Math.random()*w,
+        y: -20 - Math.random()*h*0.3,
+        vx: (Math.random()*2 - 1) * 1.2,
+        vy: 2.4 + Math.random()*3.6,
+        s: 4 + Math.random()*6,
+        r: Math.random()*Math.PI,
+        vr: (Math.random()*2 - 1) * 0.15,
+        col: colors[Math.floor(Math.random()*colors.length)],
+        shape: Math.random() > 0.5 ? "rect" : "circle"
+      });
+    }
+
+    const start = performance.now();
+    cancelAnimationFrame(confettiAnim);
+
+    function tick(t){
+      const elapsed = t - start;
+      cctx.clearRect(0,0,w,h);
+
+      for(const p of confettiPieces){
+        p.x += p.vx;
+        p.y += p.vy;
+        p.r += p.vr;
+        p.vx *= 0.995;
+
+        if(p.y > h + 40) p.y = -20;
+
+        cctx.save();
+        cctx.translate(p.x, p.y);
+        cctx.rotate(p.r);
+        cctx.fillStyle = p.col;
+
+        if(p.shape === "rect"){
+          cctx.fillRect(-p.s/2, -p.s/2, p.s, p.s*0.65);
+        } else {
+          cctx.beginPath();
+          cctx.arc(0,0,p.s*0.4,0,Math.PI*2);
+          cctx.fill();
+        }
+        cctx.restore();
+      }
+
+      if(elapsed < durationMs){
+        confettiAnim = requestAnimationFrame(tick);
+      } else {
+        cctx.clearRect(0,0,w,h);
+        confettiCanvas.style.display = "none";
+      }
+    }
+
+    confettiAnim = requestAnimationFrame(tick);
+  }
+
+  // ======================
+  // BIG BACKGROUND HEARTS
+  // ======================
   function spawnHearts(batch = 6){
     const layer = document.getElementById("hearts");
     if(!layer) return;
@@ -362,9 +505,17 @@
     setTimeout(()=>spawnHearts(2), 1600);
   }
 
+  // Expose for inline onclick
+  window.next = next;
+  window.back = back;
+  window.noTried = noTried;
+  window.yesClicked = yesClicked;
+
   spawnHearts(6);
   render();
 </script>
 </body>
 </html>
+
+
 
