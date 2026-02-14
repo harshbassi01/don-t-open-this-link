@@ -33,7 +33,6 @@
     .eng{ font-family: Georgia, "Times New Roman", serif; letter-spacing:0.15px; }
     .ui{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 
-    /* Hearts */
     .hearts-layer{
       position: fixed;
       inset: 0;
@@ -56,7 +55,6 @@
       to{ transform: translateY(-120vh) translateX(var(--dx)) scale(var(--sc)) rotate(var(--rot)); opacity:0; }
     }
 
-    /* Glass card */
     .card{
       position:relative;
       z-index:1;
@@ -156,7 +154,6 @@
       transition: transform 0.18s ease, opacity 0.25s ease;
     }
 
-    /* GIF wrapper (perfect fit square) */
     .gifWrap{
       margin-top:12px;
       border-radius:20px;
@@ -175,6 +172,18 @@
       display:block;
       object-fit: cover;
     }
+
+    .errBox{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:#fff0f0;
+      border:1px solid #ffb3c1;
+      color:#7a0c2e;
+      text-align:left;
+      white-space:pre-wrap;
+      font-size:14px;
+    }
   </style>
 </head>
 
@@ -183,6 +192,17 @@
   <div class="card" id="app"></div>
 
 <script>
+  // Show errors on screen (so we know exactly what broke)
+  const app = document.getElementById("app");
+  window.addEventListener("error", (e) => {
+    app.innerHTML = `
+      <h1>Oops 😬</h1>
+      <p class="hint ui">Error aa gaya. Screenshot bhej deo.</p>
+      <div class="errBox">${String(e.message || e.error || e)}</div>
+      <p class="hint ui">Tip: link open karo like: ?v=99 (cache fix)</p>
+    `;
+  });
+
   const herName = "Siyu";
   const yourName = "Chingu";
 
@@ -195,10 +215,9 @@
 ਮੈਂ ਸਾਰੀ ਜਿੰਦਗੀ ਤੇਰੇ ਨਾਲ ਜਿਊਣੀ ਏ...।
 ਤੂੰ ਸਭ ਤੋਂ ਸੋਹਣੀ ਏ... ਤੂੰ ਸਭ ਤੋਂ ਸੋਹਣੀ ਏ....❤️`;
 
-  // Mind-blowing GIF only AFTER YES
+  // GIF only after YES
   const mindBlowingGif = "https://media1.tenor.com/m/QsJUMsKoCGUAAAAd/cat-heart-eye.gif";
 
-  const app = document.getElementById("app");
   let page = 1;
   let yesScale = 1;
 
@@ -208,7 +227,6 @@
     else renderPage3();
   }
 
-  // Page 1: only Hello Siyu
   function renderPage1(){
     app.innerHTML = `
       <h1>Valentine’s Day Special 💌</h1>
@@ -221,7 +239,6 @@
     `;
   }
 
-  // Page 2: tareef lines only (NO SHAYARI, NO GIF)
   function renderPage2(){
     app.innerHTML = `
       <h1>Just for you 💗</h1>
@@ -241,7 +258,6 @@
     `;
   }
 
-  // Page 3: valentine question
   function renderPage3(){
     yesScale = 1;
 
@@ -259,14 +275,8 @@
     `;
   }
 
-  function next(){
-    page = Math.min(3, page + 1);
-    render();
-  }
-  function back(){
-    page = Math.max(1, page - 1);
-    render();
-  }
+  function next(){ page = Math.min(3, page + 1); render(); }
+  function back(){ page = Math.max(1, page - 1); render(); }
 
   function noTried(){
     const noBtn = document.getElementById("noBtn");
@@ -286,7 +296,6 @@
     }
   }
 
-  // After YES: show GIF (mind-blowing moment)
   function yesClicked(){
     app.innerHTML = `
       <h1>YAYYYY 💞</h1>
@@ -304,7 +313,14 @@
     `;
   }
 
-  // Big premium hearts
+  // IMPORTANT: expose functions for inline onclick
+  window.render = render;
+  window.next = next;
+  window.back = back;
+  window.noTried = noTried;
+  window.yesClicked = yesClicked;
+  window.page = page;
+
   function spawnHearts(batch = 6){
     const layer = document.getElementById("hearts");
     if(!layer) return;
@@ -351,5 +367,4 @@
 </script>
 </body>
 </html>
-
 
