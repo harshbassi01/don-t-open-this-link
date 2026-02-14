@@ -14,7 +14,6 @@
     }
     *{ box-sizing:border-box; }
 
-    /* Luxury + cute romantic background */
     body{
       margin:0;
       min-height:100vh;
@@ -31,17 +30,10 @@
       overflow:hidden;
     }
 
-    /* English: simple romantic */
-    .eng{
-      font-family: Georgia, "Times New Roman", serif;
-      letter-spacing: 0.15px;
-    }
-    /* UI text (optional) */
-    .ui{
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
+    .eng{ font-family: Georgia, "Times New Roman", serif; letter-spacing:0.15px; }
+    .ui{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 
-    /* Big luxury hearts layer */
+    /* Hearts */
     .hearts-layer{
       position: fixed;
       inset: 0;
@@ -59,18 +51,12 @@
       transform: translateZ(0);
     }
     @keyframes driftUp{
-      from{
-        transform: translateY(40px) translateX(0) scale(0.9) rotate(0deg);
-        opacity:0;
-      }
+      from{ transform: translateY(40px) translateX(0) scale(0.9) rotate(0deg); opacity:0; }
       15%{ opacity:0.16; }
-      to{
-        transform: translateY(-120vh) translateX(var(--dx)) scale(var(--sc)) rotate(var(--rot));
-        opacity:0;
-      }
+      to{ transform: translateY(-120vh) translateX(var(--dx)) scale(var(--sc)) rotate(var(--rot)); opacity:0; }
     }
 
-    /* Luxury glass card */
+    /* Glass card */
     .card{
       position:relative;
       z-index:1;
@@ -182,7 +168,7 @@
       transition: transform 0.18s ease, opacity 0.25s ease;
     }
 
-    /* GIF fits perfectly (square) */
+    /* GIF wrapper (square, perfect fit) */
     .gifWrap{
       margin-top:12px;
       border-radius:20px;
@@ -199,7 +185,7 @@
       width:100%;
       height:100%;
       display:block;
-      object-fit: cover; /* fills perfectly */
+      object-fit: cover;
     }
   </style>
 </head>
@@ -209,27 +195,28 @@
   <div class="card" id="app"></div>
 
 <script>
-  // ✅ Names
   const herName = "Siyu";
   const yourName = "Chingu";
 
-  // ✅ Page 1 text
-  const introEnglish = `I will not say you are beautiful, instead I would say: ❤️`;
-  const introPunjabi = `ਤੇਰੀਆ ਅੱਖਾ, ਤੇਰੀਆ ਗਲਾਂ, ਤੇਰੇ ਬਾਲ, ਤੇਰੀ ਚਾਲ , ਤੇਰੇ ਝੁਮਕੇ, ਤੇਰੀ ਫੁਲਕਾਰੀ,
+  // Page 2 heading line
+  const page2TitleLine = `First of all, Kuj shabad tuhadii tareef ch 😁`;
+
+  // Punjabi tareef lines (Page 2 only)
+  const tareefPunjabi = `ਤੇਰੀਆ ਅੱਖਾ, ਤੇਰੀਆ ਗਲਾਂ, ਤੇਰੇ ਬਾਲ, ਤੇਰੀ ਚਾਲ , ਤੇਰੇ ਝੁਮਕੇ, ਤੇਰੀ ਫੁਲਕਾਰੀ,
 ਮੈਂ ਵਾਦਾ ਕਰਦਾ ਮੈਂ ਕਢ ਦੇਣੀ ਆਪਣੀ ਜਿੰਦ ਤੇਰੀ ਨਾਲ ਸਾਰੀ,
 ਮੈਂ ਅੱਖ ਬੰਦ ਕਰਦਾ ਤੂੰ ਦਿਸੇ
 ਮੈਂ ਅਖਾਂ ਖੋਲਾ ਤਾ ਤੂੰ ਦਿਸੇ
 ਮੈਂ ਸਾਰੀ ਜਿੰਦਗੀ ਤੇਰੇ ਨਾਲ ਜਿਊਣੀ ਏ...।
 ਤੂੰ ਸਭ ਤੋਂ ਸੋਹਣੀ ਏ... ਤੂੰ ਸਭ ਤੋਂ ਸੋਹਣੀ ਏ....❤️`;
 
-  // ✅ Page 2 shayari
-  const shayariPage2 = `ਸਾਨੂੰ ਤੂੰ ਮਿਲਿਆ,
+  // Shayari (Page 2 + also show after YES)
+  const shayari = `ਸਾਨੂੰ ਤੂੰ ਮਿਲਿਆ,
 ਸਾਡੀ ਰੂਹ ਰਜੱ ਗਈ,
 ਤੇਰਾ ਨਾਮ ਲੇਕੇ ਚੰਨਾ,
 ਸਾਡੀ ਜਿੰਦ ਸੱਜ ਗਈ।`;
 
-  // ✅ Tenor GIF (direct file link) — fits perfectly
-  const yayGif = "https://media1.tenor.com/m/QsJUMsKoCGUAAAAd/cat-heart-eye.gif";
+  // ✅ Mind-blowing gif should appear ONLY after YES
+  const mindBlowingGif = "https://media1.tenor.com/m/QsJUMsKoCGUAAAAd/cat-heart-eye.gif";
 
   const app = document.getElementById("app");
   let page = 1;
@@ -241,44 +228,42 @@
     else renderPage3();
   }
 
+  // ✅ Page 1: ONLY "Hello Siyu"
   function renderPage1(){
     app.innerHTML = `
       <h1>Valentine’s Day Special 💌</h1>
-
-      <p class="eng" style="font-size:18px;font-weight:700;margin-top:2px;">
-        Hello ${herName} ❤️<br>
-        This side your ${yourName} 😌
+      <p class="eng" style="font-size:22px;font-weight:800;margin-top:10px;">
+        Hello ${herName} ❤️
       </p>
-
-      <div class="textBox">
-        <span class="eng" style="display:block;font-size:17px;font-weight:700;">
-          ${introEnglish}
-        </span>
-        <div style="margin-top:10px;">
-          ${introPunjabi}
-        </div>
-      </div>
 
       <button class="btn primary ui" onclick="next()">Next ➜</button>
       <p class="hint ui">Bas ik hor page 😌</p>
     `;
   }
 
+  // ✅ Page 2: ONLY tareef + shayari (NO GIF HERE)
   function renderPage2(){
     app.innerHTML = `
-      <h1>YAYYYY 💕</h1>
+      <h1>Just for you 💗</h1>
 
-      <div class="gifWrap">
-        <img src="${yayGif}" alt="yay gif">
+      <div class="textBox">
+        <span class="eng" style="display:block;font-size:17px;font-weight:800;">
+          ${page2TitleLine}
+        </span>
+        <div style="margin-top:12px;">
+          ${tareefPunjabi}
+        </div>
       </div>
 
-      <div class="shayariBox">${shayariPage2}</div>
+      <div class="shayariBox">${shayari}</div>
 
       <button class="btn primary ui" onclick="next()">Next ➜</button>
       <p class="hint ui">Hun last page aa… 😈</p>
+      <button class="btn ghost ui" onclick="back()">⬅ Back</button>
     `;
   }
 
+  // ✅ Page 3: Question page
   function renderPage3(){
     yesScale = 1;
 
@@ -300,7 +285,6 @@
     page = Math.min(3, page + 1);
     render();
   }
-
   function back(){
     page = Math.max(1, page - 1);
     render();
@@ -324,22 +308,27 @@
     }
   }
 
+  // ✅ After YES: show GIF here (mind-blowing moment)
   function yesClicked(){
     app.innerHTML = `
-      <h1>Hehe 😌❤️</h1>
+      <h1>YAYYYY 💞</h1>
 
-      <p class="ui" style="font-size:18px;margin-top:6px;">
+      <div class="gifWrap">
+        <img src="${mindBlowingGif}" alt="mind blowing gif">
+      </div>
+
+      <p class="ui" style="font-size:18px;margin-top:14px;">
         Pav bhaji di kasam, kade dhokha nahi dunga 🥖❤️<br>
         — <span class="eng" style="font-weight:800;">${yourName}</span>
       </p>
 
-      <div class="shayariBox">${shayariPage2}</div>
+      <div class="shayariBox">${shayari}</div>
 
       <button class="btn primary ui" onclick="page=1; render()">Back to Start</button>
     `;
   }
 
-  /* BIG premium hearts (few + slow) */
+  // Big premium hearts
   function spawnHearts(batch = 6){
     const layer = document.getElementById("hearts");
     if(!layer) return;
@@ -369,7 +358,7 @@
       h.style.animationDelay = delay + "s";
       h.style.animationDuration = duration + "s";
       h.style.width = size + "px";
-      h.style.height = size + "px";
+      h.style.height = size + "px";  // ✅ fixed
       h.style.setProperty("--dx", dx);
       h.style.setProperty("--sc", sc);
       h.style.setProperty("--rot", rot);
